@@ -12,7 +12,7 @@ namespace Queue
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            for(int i = 0; i < 1000000; i++) {
+            for(int i = 0; i < 100000; i++) {
                 myQueue.Enqueue(i);
                 myQueue.Contains(i);
                 if(i%8 == 0)
@@ -24,7 +24,7 @@ namespace Queue
             Console.WriteLine(stopwatch.ElapsedMilliseconds);
 
             stopwatch.Restart();
-            for (int i = 0; i < 1000000; i++)
+            for (int i = 0; i < 100000; i++)
             {
                 microsoftQueue.Enqueue(i);
                 microsoftQueue.Contains(i);

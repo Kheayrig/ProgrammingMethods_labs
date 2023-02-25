@@ -127,7 +127,7 @@ namespace TestQueue
             {
                 q.Enqueue(i + 10);
             }
-            Assert.IsFalse(q.Contains(15));
+            Assert.IsFalse(q.Contains(3));
             Assert.IsFalse(q.Contains(0));
 
         }
@@ -151,6 +151,21 @@ namespace TestQueue
             Assert.IsFalse(q.Contains(0));
 
         }
+        [TestMethod]
+        public void TestSet()
+        {
+            var q = new CustomQueue<int>(0);
+            for (int i = 0; i < 4; i++) 
+            {
+                q.Enqueue(i);
+            }
+            q.Dequeue();
+            q.Enqueue(5);
+            Assert.AreEqual(1, q.Dequeue());
+            Assert.AreEqual(2, q.Dequeue());
+            Assert.AreEqual(3, q.Dequeue());
+            Assert.AreEqual(5, q.Dequeue());
 
+        }
     }
 }
