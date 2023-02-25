@@ -20,8 +20,10 @@ namespace AVLTreeConsole
             Console.WriteLine("--------{0}", tree.Count);
             tree.Insert(6, 6);
             Console.WriteLine("--------{0}", tree.Count);
+            tree.ConsolePrint();
             tree.Remove(new Node<int, int>(1, 1));
             Console.WriteLine("--------{0}", tree.Count);
+            tree.ConsolePrint();
             tree.Remove(new Node<int, int>(2, 2));
             Console.WriteLine("--------{0}", tree.Count);
             tree.ConsolePrint();

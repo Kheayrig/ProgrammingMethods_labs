@@ -5,7 +5,7 @@ namespace AVLTree
     public class Tree<TKey, TValue> where TKey : IComparable<TKey>
     {
         public Node<TKey,TValue>? Root { get; set; }
-        public int Count { get; set; }
+        public int Count { get; private set; }
 
         public int GetHeight(Node<TKey,TValue>? node)
         {
@@ -19,43 +19,79 @@ namespace AVLTree
 
         public void Insert(Node<TKey, TValue> node)
         {
-            if(Root == null)
+            Count++;
+            if (Root == null)
             {
                 Root = node;
-                Count++;
                 return;
             }
-            Node<TKey, TValue> currentNode = Root;
-            var parent = currentNode;
-            while(currentNode != null)
+            var res = FindNodeParent(node);
+            node.Parent = res.Key;
+
+            if (res.Value == false && res.Key.Left == null)
             {
-                parent = currentNode;
-                if (node.Key.CompareTo(currentNode.Key) > 0)
-                {
-                    currentNode = currentNode.Right;
-                    if(currentNode == null)
-                    {
-                        parent.Right = node;
-                        parent.Right.Parent = parent;
-                    }
-                }
-                else if(node.Key.CompareTo(currentNode.Key) < 0)
-                {
-                    currentNode = currentNode.Left;
-                    if (currentNode == null)
-                    {
-                        parent.Left = node;
-                        parent.Left.Parent = parent;
-                    }
-                }
-                else throw new ArgumentException("Such key is already added");
+                res.Key.Left = node;
             }
-            Count++;
+            else if(res.Value == true && res.Key.Right == null)
+            {
+                res.Key.Right = node;
+            }
+            else
+            {
+                Count--;
+                throw new ArgumentException("Such key is already added");
+            }
         }
 
         public void Insert(TKey key, TValue value)
         {
             Insert(new Node<TKey, TValue>(key, value));
+        }
+
+        public Node<TKey, TValue> Find(Node<TKey, TValue> node)
+        {
+            var res = FindNodeParent(node);
+            Node<TKey, TValue>? foundNode;
+            if (res.Value == true) foundNode = res.Key.Right;
+            else if (res.Value == false) foundNode = res.Key.Left;
+            else foundNode = res.Key ?? Root;
+
+            if (foundNode == null) throw new ArgumentException("Key not found");
+
+            return foundNode;
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns>node parent + direction(true-right child, false - left child, null - node is root)</returns>
+        /// <exception cref="ArgumentException"></exception>
+        private KeyValuePair<Node<TKey, TValue>, bool?> FindNodeParent(Node<TKey, TValue> node)
+        {
+            var currentNode = Root ?? throw new ArgumentNullException("Tree is empty");
+            var parent = currentNode;
+            bool? direction = null;
+            while (currentNode != null)
+            {
+                parent = currentNode;
+                if (node.Key.CompareTo(currentNode.Key) < 0)
+                {
+                    currentNode = currentNode.Left;
+                    direction = false;
+                }
+                else if (node.Key.CompareTo(currentNode.Key) > 0)
+                {
+                    currentNode = currentNode.Right;
+                    direction = true;
+                }
+                else {
+                    parent = currentNode.Parent;
+                    break; 
+                }
+            }
+            return new KeyValuePair<Node<TKey, TValue>, bool?>(parent, direction);
         }
 
         //private void FixBalance(Node<TKey, TValue> node)
@@ -117,18 +153,6 @@ namespace AVLTree
             else removedNode.Parent.Right = node;
         }
 
-        public Node<TKey,TValue> Find(Node<TKey, TValue> node)
-        {
-            var currentNode = Root;
-            while(currentNode != null)
-            {
-                if(node.Key.CompareTo(currentNode.Key) < 0) currentNode = currentNode.Left;
-                else if(node.Key.CompareTo(currentNode.Key) > 0) currentNode = currentNode.Right;
-                else return currentNode;
-            }
-            throw new ArgumentException("Such node does not exist!");
-        }
-
         //private Node<TKey, TValue> RotateLeft(Node<TKey, TValue> node)
         //{
 
@@ -180,8 +204,8 @@ namespace AVLTree
         public Node<TKey, TValue>? Left { get; set; }
         public Node<TKey, TValue>? Right { get; set; }
 
-        public TKey Key { get; set; }
-        public TValue Value { get; set; }
+        public TKey Key { get; internal set; }
+        public TValue Value { get; internal set; }
 
         public int Height { get; set; } = 1;
 
