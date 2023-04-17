@@ -18,9 +18,9 @@ namespace TestAVLTree
         [TestMethod]
         public void TestInsertCountIncrementTwice()
         {
-            AVLTree<string, int> tree = new AVLTree<string, int>();
-            tree.Insert("abc", 123);
-            tree.Insert("abcd", 1234);
+            AVLTree<int, int> tree = new AVLTree<int, int>();
+            tree.Insert(1, 123);
+            tree.Insert(2, 1234);
             Assert.AreEqual(2, tree.Count);
         }
 

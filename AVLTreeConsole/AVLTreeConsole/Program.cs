@@ -1,52 +1,55 @@
 ﻿using AVLTree;
+using System.Diagnostics;
+
 namespace AVLTreeConsole
 {
     internal class Program
     {
         static void Main(string[] args)
         {
-            int n = 1000;
-            AVLTree<string, int> tree = new AVLTree<string, int>();
-            for (int i = 0; i < n; i++)
+            Random rnd = new();
+            HashSet<int> hashSet = new HashSet<int>();
+            while (hashSet.Count < 1000000)
             {
-                tree.Insert(i.ToString(), i);
+                hashSet.Add(rnd.Next());
             }
-            tree.ConsolePrint();
-            for (int i = 0; i < n; i++)
+            var array = hashSet.ToArray();
+
+            var tree = new AVLTree<int, int>();
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int i = 0; i < array.Length; i++)
             {
-                tree.Remove(i.ToString());
+                tree.Insert(array[i], array[i]);
             }
-            //var tree = new AVLTree<int,int>();
-            //tree.Insert(7, 7);
-            //Console.WriteLine("--------{0}", tree.Count);
-            //tree.Insert(1, 1);
-            //tree.ConsolePrint();
-            //Console.WriteLine("--------{0}",tree.Count);
-            //tree.Insert(3, 3);
-            //tree.ConsolePrint();
-            //Console.WriteLine("--------{0}", tree.Count);
-            //tree.Insert(14, 14);
-            //tree.ConsolePrint();
-            //Console.WriteLine("--------{0}", tree.Count);
-            //tree.Insert(0, 0);
-            //tree.ConsolePrint();
-            //Console.WriteLine("--------{0}", tree.Count);
-            //tree.Insert(2, 2);
-            //tree.ConsolePrint();
-            //Console.WriteLine("--------{0}", tree.Count);
-            //tree.Insert(6, 6);
-            //tree.ConsolePrint();
-            //Console.WriteLine("--------{0}", tree.Count);
-            //tree.ConsolePrint();
-            //tree.Remove(new Node<int, int>(1, 1));
-            //tree.ConsolePrint();
-            //Console.WriteLine("--------{0}", tree.Count);
-            //tree.Remove(new Node<int, int>(2, 2));
-            //tree.ConsolePrint();
-            //Console.WriteLine("--------{0}", tree.Count);
-            //tree.Remove(new Node<int, int>(0, 0));
-            //tree.ConsolePrint();
-            //Console.WriteLine("--------{0}", tree.Count);
+            for (int i = 5000; i < 7000; i++)
+            {
+                tree.Remove(array[i]);
+            }
+            for (int i = 0; i < array.Length; i++)
+            {
+                tree.Contains(array[i]);
+            }
+            stopwatch.Stop();
+            Console.WriteLine("AVLTree: " + stopwatch.ElapsedMilliseconds);
+            stopwatch.Reset();
+
+            SortedDictionary<int, int> dictionary = new();
+            stopwatch.Start();
+            for (int i = 0; i < array.Length; i++)
+            {
+                dictionary.Add(array[i], array[i]);
+            }
+            for (int i = 5000; i < 7000; i++)
+            {
+                dictionary.Remove(array[i]);
+            }
+            for (int i = 0; i < array.Length; i++)
+            {
+                dictionary.ContainsKey(array[i]);
+            }
+            stopwatch.Stop();
+            Console.WriteLine("SortedDictionary: " + stopwatch.ElapsedMilliseconds);
         }
     }
 }

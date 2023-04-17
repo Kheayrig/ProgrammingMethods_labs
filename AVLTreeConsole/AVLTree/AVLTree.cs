@@ -242,35 +242,6 @@ namespace AVLTree
             RotateLeft(node.Left);
             return RotateRight(node);
         }
-
-        public void ConsolePrint()
-        {
-            var list = new List<Node<TKey, TValue>?>() { Root };
-            bool isLeaves = false;
-            while (!isLeaves)
-            {
-                var listTemp = new List<Node<TKey, TValue>?>();
-                isLeaves = true;
-                foreach (var item in list)
-                {
-                    if (item != null)
-                    {
-                        isLeaves = false;
-                        listTemp.Add(item.Left);
-                        listTemp.Add(item.Right);
-                        Console.Write(item.Value);
-                        Console.Write(" ");
-                    }
-                    else
-                    {
-                        Console.Write("X ");
-                    }
-                }
-
-                list = listTemp;
-                Console.WriteLine();
-            }
-        }
     }
     public class Node<TKey, TValue>
     {
